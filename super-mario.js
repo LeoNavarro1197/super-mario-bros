@@ -1,3 +1,5 @@
+import { createAnimations } from "./animations.js"
+
 const config = {
     type: Phaser.AUTO,
     width: 500,
@@ -41,9 +43,30 @@ function preload() {
         "floorbricks",
         "assets/scenery/overworld/floorbricks.png"
     )
+
+    this.load.audio(
+        "music",
+        "assets/sound/music/overworld/theme.mp3"
+    )
+
+    this.load.audio(
+        "gameover",
+        "assets/sound/music/gameover.mp3"
+    )
+
+    this.load.audio(
+        "jump",
+        "assets/sound/effects/jump.mp3"
+    )
 }
 
 function create() {
+
+    this.sound.play("music", {
+        loop: true,
+        volume: 0.5,
+    })
+
     /*this.mario = this.add.sprite(
         250,
         420,
@@ -60,31 +83,7 @@ function create() {
     .setGravityY(1000)
     .setCollideWorldBounds(true)
 
-    this.mario.anims.create({
-        key: "walk",
-        frames: this.anims.generateFrameNumbers(
-            "mario",
-            {
-                start: 1,
-                end: 3,
-            }
-        ),
-        frameRate: 10,
-        repeat: -1,
-    })
-
-    this.anims.create({
-        key: "jump",
-        frames: this.anims.generateFrameNumbers(
-            "mario",
-            {
-                start: 5,
-                end: 5,
-            }
-        ),
-        frameRate: 10,
-        repeat: -1,
-    })
+    createAnimations(this)
 
     this.add.image(
         250,
@@ -136,14 +135,23 @@ function create() {
 }
 
 function update() {
+
+    if(this.mario.isDead){
+        return
+    }
+
     if(this.keys.right.isDown) {
         this.mario.x += 2.5
-        this.mario.anims.play("walk", true)
         this.mario.setFlipX(this.keys.left.isDown)
+        if(this.mario.body.touching.down){
+            this.mario.anims.play("walk", true)
+        }
     }else if(this.keys.left.isDown) {
         this.mario.x -= 2.5
-        this.mario.anims.play("walk", true)
         this.mario.setFlipX(this.keys.left.isDown)
+        if(this.mario.body.touching.down){
+            this.mario.anims.play("walk", true)
+        }
     } else{
         this.mario.anims.stop()
         this.mario.setFrame(0)
@@ -151,8 +159,26 @@ function update() {
 
     if(this.keys.up.isDown) {
         this.mario.anims.play("jump", true)
+        this.sound.play("jump")
         if(this.mario.body.touching.down){
             this.mario.setVelocityY(-600)
         }
+    }
+
+    if(this.mario.y >= 480){
+        this.mario.isDead = true
+        this.mario.anims.play("dead", true)
+        this.mario.setCollideWorldBounds(false)
+        this.sound.play("gameover")
+        //this.sound.pause("music")
+
+        setTimeout(() => {
+            this.mario.setVelocityY(-700)
+        }, 100)
+        
+        setTimeout(() => {
+            this.scene.restart()
+            this.sound.stopAll()
+        }, 3000)
     }
 }

@@ -4,9 +4,9 @@
      <meta charset="UTF-8">
      <meta http-equiv="X-UA-Compatible" content="IE=edge">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Document</title>
+     <title>Super Mario</title>
      <script  src = " //cdn.jsdelivr.net/npm/phaser@3.88.2/dist/phaser.js " > </script> <script src = " //cdn.jsdelivr.net/npm/phaser@3.88.2/dist/phaser.min.js " > </script>
-     <script src="./super-mario.js"></script>
+     <script type="module" src="./super-mario.js"></script>
  </head>
  <style>
     body{
@@ -14,13 +14,26 @@
         background-color: black;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        
+    }
+    h1{
+        color: white;
+        text-align: center;
+    }
+    p{
+        color: white;
+        text-align: center;
     }
     #super-mario{
         border: 1px solid white;
     }
  </style>
  <body>
+    <h1>Super Mario Bros</h1>
+    <p>
+        Use las flechas del teclado para manejar a Mario<br></br>
+        (Está versión solo está disponible para escritorio).
+    </p>
     <div id="super-mario"></div>
  </body>
  </html>
