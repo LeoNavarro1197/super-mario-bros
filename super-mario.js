@@ -159,7 +159,7 @@ function update() {
 
     if(this.keys.up.isDown) {
         this.mario.anims.play("jump", true)
-        this.sound.play("jump")
+        /*this.sound.play("jump")*/
         if(this.mario.body.touching.down){
             this.mario.setVelocityY(-600)
         }
